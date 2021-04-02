@@ -1,0 +1,7 @@
+.container {
+    background-color: slateblue;
+    flex: 10 1 auto;
+    padding: 5px 10px;
+    display: flex;
+    flex-direction: column;
+}

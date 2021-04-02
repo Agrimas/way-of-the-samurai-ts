@@ -1,0 +1,26 @@
+.App {
+    max-width: 1240px;
+    min-height: 100vh;
+    margin: 0 auto;
+    display: grid;
+    grid-template-areas:
+    'header header header'
+    'aside main main';
+    grid-template-columns: 3fr 10fr;
+    grid-template-rows: 80px 1fr;
+    background-color: skyblue;
+    box-sizing: border-box;
+    border: 1px solid black;
+}
+
+.App main {
+    height: 100%;
+    background-color: antiquewhite;
+    grid-area: main;
+}
+
+.App aside {
+    border-right: 1px solid black;
+    background-color: white;
+    grid-area: aside;
+}

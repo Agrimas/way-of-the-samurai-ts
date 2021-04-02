@@ -1,0 +1,10 @@
+.container {
+    background-color: gold;
+    flex: 2 1 auto;
+    padding: 5px;
+}
+
+.title{
+    text-align: center;
+    margin: 5px 0;
+}

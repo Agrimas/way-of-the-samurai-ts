@@ -1,0 +1,27 @@
+.container{
+    display: flex;
+    border: 1px solid black;
+    padding: 5px;
+    background-color: gray;
+    margin-bottom: 2px;
+}
+
+.infoProfile{
+    text-align: center;
+}
+
+.infoProfile span{
+    color: gold;
+}
+
+.avatar{
+    display: block;
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.postText{
+    margin-left: 5px;
+}

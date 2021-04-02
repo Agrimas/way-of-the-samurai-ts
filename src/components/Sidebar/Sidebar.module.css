@@ -1,0 +1,18 @@
+.Sidebar {
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.navlink {
+    display: block;
+    padding: 5px;
+    color: green;
+}
+
+.navlink:hover {
+    color: slateblue;
+}
+
+.active {
+    color: gold;
+}

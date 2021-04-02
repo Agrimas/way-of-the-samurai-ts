@@ -1,0 +1,11 @@
+.Header{
+    grid-area: header;
+    background-color: greenyellow;
+    box-sizing: border-box;
+    padding: 5px 20px;
+    border-bottom: 1px solid black;
+}
+
+.logo{
+    height: 100%;
+}
