@@ -1,7 +1,35 @@
 .container {
-    background-color: slateblue;
     flex: 10 1 auto;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.messagesBody {
+    background-color: slateblue;
     padding: 5px 10px;
     display: flex;
     flex-direction: column;
+    flex: 10 1 auto;
+}
+
+.messagesForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+}
+
+.textarea {
+    resize: none;
+    width: 50%;
+}
+
+.button {
+    background-color: #0B93F6;
+    padding: 5px 10px;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    margin-left: 1em;
 }

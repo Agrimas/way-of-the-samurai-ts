@@ -1,19 +1,20 @@
 import React from 'react';
-import Clasess from './Profile.module.css';
+import Classes from './Profile.module.css';
 import {InfoProfile} from './InfoProfile/InfoProfile';
 import {MyPosts} from './MyPosts/MyPosts';
-import {myPostsType} from '../../redux/state';
+import {profilePageStateType} from '../../redux/state';
 
-type ProfileType = {
-    myPosts: Array<myPostsType>
-    addPost: (text: string)=>void
+export type ProfilePropsType = profilePageStateType & {
+    addPost: () => void
+    updateTextareaValueMyPosts: (text: string) => void
 }
 
-export function Profile(props: ProfileType) {
+export function Profile(props: ProfilePropsType) {
     return (
-        <div className={Clasess.container}>
+        <div className={Classes.container}>
             <InfoProfile/>
-            <MyPosts myPosts={props.myPosts} addPost={props.addPost}/>
+            <MyPosts myPosts={props.myPosts} textareaValue={props.textareaValue} addPost={props.addPost}
+                     updateTextareaValueMyPosts={props.updateTextareaValueMyPosts}/>
         </div>
     )
 }

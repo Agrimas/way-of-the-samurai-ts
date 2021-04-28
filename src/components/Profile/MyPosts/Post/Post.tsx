@@ -1,8 +1,8 @@
 import React from 'react';
 import Clasess from './Post.module.css';
-import {myPostsType} from '../../../../redux/state';
+import {PostType} from '../../../../redux/state';
 
-export function Post({id,text, likesCount}: myPostsType) {
+export function Post({id,text, likesCount}: PostType) {
     return (
         <div className={Clasess.container}>
             <div className={Clasess.infoProfile}>

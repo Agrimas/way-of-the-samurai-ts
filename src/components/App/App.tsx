@@ -9,7 +9,10 @@ import {MessagesPage} from '../MessagesPage/MessagesPage';
 
 type AppType = {
     appState: StateType
-    addPost: (text: string)=>void
+    addPost: () => void
+    updateTextareaValueMyPosts: (text: string) => void
+    addMessage: () => void
+    updateTextareaValueDialog: (text: string) => void
 }
 
 
@@ -21,9 +24,18 @@ function App(props: AppType) {
                 <Sidebar friends={props.appState.friends}/>
             </aside>
             <main>
-                <Route path={'/profile'} render={() => <Profile myPosts={props.appState.myPosts} addPost={props.addPost}/>}/>
+                <Route path={'/profile'}
+                       render={() => <Profile myPosts={props.appState.profilePage.myPosts}
+                                              textareaValue={props.appState.profilePage.textareaValue}
+                                              addPost={props.addPost}
+                                              updateTextareaValueMyPosts={props.updateTextareaValueMyPosts}/>}/>
+
+
                 <Route path={'/messages'} render={() => <MessagesPage dialogs={props.appState.messagesPage.dialogs}
-                                                                      messages={props.appState.messagesPage.messages}/>}/>
+                                                                      textareaValue={props.appState.messagesPage.textareaValue}
+                                                                      messages={props.appState.messagesPage.messages}
+                                                                      addMessage={props.addMessage}
+                                                                      updateTextareaValueDialog={props.updateTextareaValueDialog}/>}/>
             </main>
         </div>
     );
