@@ -9,6 +9,7 @@ import {MessagesPage} from '../MessagesPage/MessagesPage';
 
 type AppType = {
     appState: StateType
+    addPost: (text: string)=>void
 }
 
 
@@ -20,7 +21,7 @@ function App(props: AppType) {
                 <Sidebar friends={props.appState.friends}/>
             </aside>
             <main>
-                <Route path={'/profile'} render={() => <Profile myPosts={props.appState.myPosts}/>}/>
+                <Route path={'/profile'} render={() => <Profile myPosts={props.appState.myPosts} addPost={props.addPost}/>}/>
                 <Route path={'/messages'} render={() => <MessagesPage dialogs={props.appState.messagesPage.dialogs}
                                                                       messages={props.appState.messagesPage.messages}/>}/>
             </main>

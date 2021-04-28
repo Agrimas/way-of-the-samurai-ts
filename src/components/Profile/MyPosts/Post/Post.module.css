@@ -25,3 +25,10 @@
 .postText{
     margin-left: 5px;
 }
+
+.likesCount{
+    font-weight: bold;
+    color: gold;
+    display: flex;
+    align-items: center;
+}

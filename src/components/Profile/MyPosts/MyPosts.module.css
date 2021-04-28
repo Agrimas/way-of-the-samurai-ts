@@ -1,0 +1,27 @@
+.addPostForm{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+    margin-bottom: 1em;
+}
+
+.textarea {
+    resize: none;
+    width: 50%;
+}
+
+.button{
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-weight: bold;
+    color: white;
+    background-color: #0B93F6;
+    border: none;
+    transition: .1s;
+}
+
+.button:hover{
+    color: white;
+    background-color: gold;
+}

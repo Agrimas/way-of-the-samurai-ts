@@ -3,27 +3,23 @@ export type StateType = {
     myPosts: Array<myPostsType>
     messagesPage: messagesPageType
 }
-
-export type messagesPageType = {
-    dialogs: Array<DialogType>
-    messages: Array<MessageType>
-}
-
 export type FriendsType = {
     id: number
     name: string
 }
-
 export type myPostsType = {
     id: number
     text: string
+    likesCount: number
 }
-
+export type messagesPageType = {
+    dialogs: Array<DialogType>
+    messages: Array<MessageType>
+}
 export type DialogType = {
     id: number
     name: string
 }
-
 export type MessageType = {
     id: number
     text: string
@@ -47,15 +43,18 @@ let state: StateType = {
     myPosts: [
         {
             id: 1,
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id itaque obcaecati pariatur sit veniam! Accusantium adipisci delectus dolor doloribus dolorum ea harum in ipsum iste minus, quo ratione temporibus unde.'
+            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id itaque obcaecati pariatur sit veniam! Accusantium adipisci delectus dolor doloribus dolorum ea harum in ipsum iste minus, quo ratione temporibus unde.',
+            likesCount: 5
         },
         {
             id: 2,
-            text: 'Lorem ipsum dolor sit amet.'
+            text: 'Lorem ipsum dolor sit amet.',
+            likesCount: 6
         },
         {
             id: 3,
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi, tempora!'
+            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi, tempora!',
+            likesCount: 8
         }
     ],
     messagesPage: {
@@ -89,5 +88,15 @@ let state: StateType = {
     }
 }
 
+export function addPost(text: string) {
+    debugger
+    let newPost:myPostsType = {
+        id: 123,
+        text: text,
+        likesCount: 0
+    }
+
+    state.myPosts.push(newPost);
+}
 
 export default state;
