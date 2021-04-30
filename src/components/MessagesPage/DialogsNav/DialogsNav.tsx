@@ -1,6 +1,6 @@
 import React from 'react';
 import Classes from './DialogsNav.module.css';
-import {DialogType} from '../../../redux/state';
+import {DialogType} from '../../../redux/dialogs-reducer';
 import {DialogNav} from './DialogNav/DialogNav';
 
 type DialogsType = {

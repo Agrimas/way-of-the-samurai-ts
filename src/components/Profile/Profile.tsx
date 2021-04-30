@@ -1,18 +1,17 @@
 import React from 'react';
 import Classes from './Profile.module.css';
 import {InfoProfile} from './InfoProfile/InfoProfile';
-import {MyPosts} from './MyPosts/MyPosts';
-import {dispatchType, profilePageStateType} from '../../redux/state';
+import {MyPostsContainer} from './MyPosts/MyPostsContainer';
+import {StoreContext} from '../../StoreContext';
 
-export type ProfilePropsType = profilePageStateType & {
-    dispatch: dispatchType
-}
 
-export function Profile(props: ProfilePropsType) {
+export function Profile() {
     return (
         <div className={Classes.container}>
             <InfoProfile/>
-            <MyPosts myPosts={props.myPosts} textareaValue={props.textareaValue} dispatch={props.dispatch}/>
+            <StoreContext.Consumer>
+                {store => <MyPostsContainer store={store}/>}
+            </StoreContext.Consumer>
         </div>
     )
 }

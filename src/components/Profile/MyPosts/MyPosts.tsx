@@ -1,20 +1,25 @@
-import React, {ChangeEvent, TextareaHTMLAttributes, useRef} from 'react';
+import React, {ChangeEvent} from 'react';
 import Classes from './MyPosts.module.css';
 import {Post} from './Post/Post';
-import {ProfilePropsType} from '../Profile';
-import {addPostActionCreator, updateTextareaValueMyPosts} from '../../../redux/state';
+import {PostType} from '../../../redux/profile-reducer';
 
+type MyPosts = {
+    posts: Array<PostType>
+    textareaValue: string
+    textareaUpdateValue: (text: string) => void
+    addPost: () => void
+}
 
-export function MyPosts(props: ProfilePropsType) {
-    let dataMyPosts = props.myPosts.map(post => <Post key={post.id} id={post.id} text={post.text}
-                                                      likesCount={post.likesCount}/>)
+export function MyPosts(props: MyPosts) {
+    let dataMyPosts = props.posts.map(post => <Post key={post.id} id={post.id} text={post.text}
+                                                    likesCount={post.likesCount}/>)
 
     const textareaHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        props.dispatch(updateTextareaValueMyPosts(event.currentTarget.value));
+        props.textareaUpdateValue(event.currentTarget.value);
     }
 
     const addPost = () => {
-        props.dispatch(addPostActionCreator())
+        props.addPost();
     }
 
     return (

@@ -1,6 +1,6 @@
 import React from 'react';
 import Classes from './DialogNav.module.css';
-import {DialogType} from '../../../../redux/state';
+import {DialogType} from '../../../../redux/dialogs-reducer';
 import {NavLink} from 'react-router-dom';
 
 export function DialogNav(props: DialogType) {

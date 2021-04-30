@@ -1,28 +1,26 @@
 import React, {ChangeEvent} from 'react';
 import Classes from './Dialog.module.css';
 import {Message} from './Message/Message';
-import {
-    addMessageActionCreator,
-    dispatchType,
-    MessageType,
-    updateTextareaValueDialogActionCreator
-} from '../../../redux/state';
+import {dispatchType} from '../../../redux/redux-store';
+import {MessageType} from '../../../redux/dialogs-reducer';
+import {addMessageActionCreator, updateTextareaValueDialogActionCreator} from '../../../redux/dialogs-reducer';
 
 type DialogType = {
     messages: Array<MessageType>
-    dispatch: dispatchType
+    textareaValue: string
+    updateTextareaValue: (text: string) => void
+    addMessage: () => void
 }
-
 
 export function Dialog(props: DialogType) {
     let messages = props.messages.map(message => <Message id={message.id} text={message.text} isMine={message.isMine}/>)
 
     function onChangeTextareaHandler(event: ChangeEvent<HTMLTextAreaElement>) {
-        props.dispatch(updateTextareaValueDialogActionCreator(event.currentTarget.value));
+        props.updateTextareaValue(event.currentTarget.value)
     }
 
     function addMessage() {
-        props.dispatch(addMessageActionCreator())
+        props.addMessage()
     }
 
     return (
@@ -32,7 +30,7 @@ export function Dialog(props: DialogType) {
 
             </div>
             <div className={Classes.messagesForm}>
-                <textarea className={Classes.textarea} onChange={onChangeTextareaHandler}/>
+                <textarea className={Classes.textarea} onChange={onChangeTextareaHandler} value={props.textareaValue}/>
                 <input type="button" value={'Send'} className={Classes.button} onClick={addMessage}/>
             </div>
         </div>

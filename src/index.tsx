@@ -4,21 +4,23 @@ import './index.css';
 import App from './components/App/App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from 'react-router-dom';
-import store from './redux/state';
+import {Store} from './redux/redux-store';
+import {Provider} from './StoreContext';
 
 function rerender() {
     ReactDOM.render(
         <React.StrictMode>
             <BrowserRouter>
-                <App appState={store.getState()} dispatch={store.dispatch.bind(store)}/>
+                <Provider store={Store}>
+                    <App/>
+                </Provider>
             </BrowserRouter>
         </React.StrictMode>,
         document.getElementById('root')
-    )
-    ;
+    );
 }
 
-store.subscriber(rerender);
+Store.subscribe(rerender);
 
 rerender();
 

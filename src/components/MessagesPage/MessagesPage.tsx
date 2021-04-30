@@ -1,18 +1,21 @@
 import React from 'react';
 import Classes from './MessagesPage.module.css';
 import {DialogsNav} from './DialogsNav/DialogsNav';
-import {dispatchType, messagesPageStateType} from '../../redux/state';
-import {Dialog} from './Dialog/Dialog';
+import {StoreContext} from '../../StoreContext';
+import {DialogContainer} from './Dialog/DialogContainer';
 
-type messagesPageType = messagesPageStateType & {
-    dispatch: dispatchType
-}
 
-export function MessagesPage(props: messagesPageType) {
+export function MessagesPage() {
     return (
         <div className={Classes.container}>
-            <DialogsNav dialogs={props.dialogs}/>
-            <Dialog messages={props.messages} dispatch={props.dispatch}/>
+
+            <StoreContext.Consumer>
+                {store => <DialogsNav dialogs={store.getState().messagesPage.dialogs}/>}
+            </StoreContext.Consumer>
+
+            <StoreContext.Consumer>
+                {store => <DialogContainer store={store}/>}
+            </StoreContext.Consumer>
         </div>
     );
 }

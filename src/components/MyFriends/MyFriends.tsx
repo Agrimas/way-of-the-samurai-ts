@@ -1,6 +1,6 @@
 import React from 'react';
 import Classes from './MyFriends.module.css';
-import {FriendsType} from '../../redux/state';
+import {FriendsType} from '../../redux/sidebar-reducer';
 import {Friend} from './Friend/Friend';
 
 type MyFriendsType = {

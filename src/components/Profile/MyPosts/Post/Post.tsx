@@ -1,6 +1,6 @@
 import React from 'react';
 import Clasess from './Post.module.css';
-import {PostType} from '../../../../redux/state';
+import {PostType} from '../../../../redux/profile-reducer';
 
 export function Post({id,text, likesCount}: PostType) {
     return (
