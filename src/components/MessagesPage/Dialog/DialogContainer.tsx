@@ -1,27 +1,21 @@
-import React, {ChangeEvent} from 'react';
-import {Message} from './Message/Message';
+import React from 'react';
 import {addMessageActionCreator, updateTextareaValueDialogActionCreator} from '../../../redux/dialogs-reducer';
 import {Dialog} from './Dialog';
-import {StoreType} from '../../../redux/redux-store';
+import {connect} from 'react-redux';
+import {dispatchType, StateType} from '../../../redux/redux-store';
 
-type DialogContainerType = {
-    store: StoreType
+function mapStateToProps(state: StateType) {
+    return {
+        messages: state.messagesPage.messages,
+        textareaValue: state.messagesPage.textareaValue,
+    }
 }
 
-
-export function DialogContainer(props: DialogContainerType) {
-    let messages = props.store.getState().messagesPage.messages;
-
-    let textareaValue = props.store.getState().messagesPage.textareaValue;
-
-    function updateTextareaValue(text: string) {
-        props.store.dispatch(updateTextareaValueDialogActionCreator(text));
+function mapDispatchToProps(dispatch: dispatchType) {
+    return {
+        updateTextareaValue: (text: string) => dispatch(updateTextareaValueDialogActionCreator(text)),
+        addMessage: () => dispatch(addMessageActionCreator())
     }
-
-    function addMessage() {
-        props.store.dispatch(addMessageActionCreator())
-    }
-
-    return <Dialog messages={messages} updateTextareaValue={updateTextareaValue} addMessage={addMessage}
-                   textareaValue={textareaValue}/>
 }
+
+export const DialogContainer = connect(mapStateToProps, mapDispatchToProps)(Dialog);

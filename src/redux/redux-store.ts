@@ -1,7 +1,7 @@
 import {createStore, combineReducers} from 'redux'
-import dialogsReducer, {messagesPageStateType} from './dialogs-reducer';
-import profileReducer, {profilePageStateType} from './profile-reducer';
-import sidebarReducer, {FriendsType} from './sidebar-reducer';
+import dialogsReducer from './dialogs-reducer';
+import profileReducer from './profile-reducer';
+import sidebarReducer from './sidebar-reducer';
 
 export type  dispatchType = (action: actionType) => void;
 export type actionType = {
@@ -16,5 +16,7 @@ let reducers = combineReducers({
 });
 
 export const Store = createStore(reducers);
+
+export type StateType = ReturnType<typeof Store.getState>
 
 export type StoreType = typeof Store;

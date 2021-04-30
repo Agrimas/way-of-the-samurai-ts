@@ -1,26 +1,21 @@
 import React from 'react';
 import {addPostActionCreator, updateTextareaValueMyPosts} from '../../../redux/profile-reducer';
-import {StoreType} from '../../../redux/redux-store';
+import {dispatchType, StateType} from '../../../redux/redux-store';
 import {MyPosts} from './MyPosts';
+import {connect} from 'react-redux';
 
-type MyPostsContainer = {
-    store: StoreType
+function mapStateToProps(state: StateType) {
+    return {
+        posts: state.profilePage.myPosts,
+        textareaValue: state.profilePage.textareaValue
+    }
 }
 
-export function MyPostsContainer(props: MyPostsContainer) {
-    let posts = props.store.getState().profilePage.myPosts;
-
-    let textareaValue = props.store.getState().profilePage.textareaValue;
-
-    const textareaHandler = (text: string) => {
-        props.store.dispatch(updateTextareaValueMyPosts(text))
+function mapDispatchToProps(dispatch: dispatchType) {
+    return {
+        textareaUpdateValue: (text: string) => dispatch(updateTextareaValueMyPosts(text)),
+        addPost: () => dispatch(addPostActionCreator())
     }
-
-    const addPost = () => {
-        props.store.dispatch(addPostActionCreator())
-    }
-
-    return <MyPosts textareaValue={textareaValue} posts={posts} textareaUpdateValue={textareaHandler}
-                    addPost={addPost}/>
 }
 
+export const MyPostsContainer = connect(mapStateToProps, mapDispatchToProps)(MyPosts);

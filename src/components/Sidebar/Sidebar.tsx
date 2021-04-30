@@ -4,12 +4,12 @@ import {NavLink} from 'react-router-dom';
 import {MyFriends} from '../MyFriends/MyFriends';
 import {FriendsType} from '../../redux/sidebar-reducer';
 
+
 type SidebarType = {
     friends: Array<FriendsType>
 }
 
 export function Sidebar(props: SidebarType) {
-
     return (
         <div className={Classes.Sidebar}>
             <nav>
@@ -21,3 +21,5 @@ export function Sidebar(props: SidebarType) {
         </div>
     )
 }
+
+
