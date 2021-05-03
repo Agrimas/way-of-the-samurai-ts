@@ -2,6 +2,7 @@ import {createStore, combineReducers} from 'redux'
 import dialogsReducer from './dialogs-reducer';
 import profileReducer from './profile-reducer';
 import sidebarReducer from './sidebar-reducer';
+import usersReducer from './users-reducer';
 
 export type  dispatchType = (action: actionType) => void;
 export type actionType = {
@@ -12,7 +13,8 @@ export type actionType = {
 let reducers = combineReducers({
     friends: sidebarReducer,
     messagesPage: dialogsReducer,
-    profilePage: profileReducer
+    profilePage: profileReducer,
+    usersPage: usersReducer,
 });
 
 export const Store = createStore(reducers);

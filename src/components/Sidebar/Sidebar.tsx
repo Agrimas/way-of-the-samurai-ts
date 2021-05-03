@@ -16,6 +16,8 @@ export function Sidebar(props: SidebarType) {
                 <NavLink to={'/profile'} className={Classes.navlink} activeClassName={Classes.active}>Profile</NavLink>
                 <NavLink to={'/messages'} className={Classes.navlink}
                          activeClassName={Classes.active}>Messages</NavLink>
+                <NavLink to={'/users'} className={Classes.navlink}
+                         activeClassName={Classes.active}>Users</NavLink>
             </nav>
             <MyFriends friends={props.friends}/>
         </div>

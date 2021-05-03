@@ -1,17 +1,17 @@
 import React, {ChangeEvent} from 'react';
 import Classes from './MyPosts.module.css';
 import {Post} from './Post/Post';
-import {PostType} from '../../../redux/profile-reducer';
+import {PostType, profilePageStateType} from '../../../redux/profile-reducer';
 
-type MyPosts = {
-    posts: Array<PostType>
-    textareaValue: string
+type MyPosts =  profilePageStateType & {
+    // posts: Array<PostType>
+    // textareaValue: string
     textareaUpdateValue: (text: string) => void
     addPost: () => void
 }
 
 export function MyPosts(props: MyPosts) {
-    let dataMyPosts = props.posts.map(post => <Post key={post.id} id={post.id} text={post.text}
+    let dataMyPosts = props.myPosts.map(post => <Post key={post.id} id={post.id} text={post.text}
                                                     likesCount={post.likesCount}/>)
 
     const textareaHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {

@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 
 function mapStateToProps(state: StateType) {
     return {
-        posts: state.profilePage.myPosts,
+        myPosts: state.profilePage.myPosts,
         textareaValue: state.profilePage.textareaValue
     }
 }
