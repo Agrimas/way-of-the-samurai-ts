@@ -1,0 +1,18 @@
+.container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: skyblue;
+    padding: 5px 10px;
+    box-sizing: border-box;
+}
+
+.avatarBlock{
+    width: 80px;
+}
+
+.avatarBlock img{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
