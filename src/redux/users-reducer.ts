@@ -3,12 +3,14 @@ const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET-USERS';
 const SET_CURRENT_PAGE = 'SET-CURRENT-PAGE';
 const SET_TOTAL_USERS_COUNT = 'SET-TOTAL-USERS-COUNT';
+const SET_FETCHING = 'SET-FETCHING';
 
 export type userPageStateType = {
     users: Array<userType>
     pageSize: number
     currentPage: number
     totalUsersCount: number
+    isFetching: boolean
 }
 export type userType = {
     id: string,
@@ -19,7 +21,7 @@ export type userType = {
     uniqueUrlName: string | null
 }
 type photosType = {
-    small: string | null,
+    small: string | null
     large: string | null
 }
 export type actionUserPageType = {
@@ -28,13 +30,15 @@ export type actionUserPageType = {
     users?: Array<userType>
     currentPage?: number
     totalUsersCount?: number
+    isFetching?: boolean
 }
 
 const initialState: userPageStateType = {
     users: [],
     pageSize: 5,
     currentPage: 1,
-    totalUsersCount: 20
+    totalUsersCount: 20,
+    isFetching: false,
 }
 
 function usersReducer(state = initialState, action: actionUserPageType): userPageStateType {
@@ -83,43 +87,58 @@ function usersReducer(state = initialState, action: actionUserPageType): userPag
                 }
             }
             return {...state};
+        case SET_FETCHING:
+            if (typeof action.isFetching != 'undefined') {
+                return {
+                    ...state,
+                    isFetching: action.isFetching
+                }
+            }
+            return state;
         default:
             return state;
     }
 }
 
-export function followAC(id: string) {
+export function follow(id: string) {
     return {
         type: FOLLOW,
         id: id
     }
 }
 
-export function unFollowAC(id: string) {
+export function unFollow(id: string) {
     return {
         type: UNFOLLOW,
         id: id
     }
 }
 
-export function setUsersAC(users: Array<userType>) {
+export function setUsers(users: Array<userType>) {
     return {
         type: SET_USERS,
         users: users
     }
 }
 
-export function setCurrentPageAC(currentPage: number) {
+export function setCurrentPage(currentPage: number) {
     return {
         type: SET_CURRENT_PAGE,
         currentPage: currentPage
     }
 }
 
-export function setTotalUsersCountAC(totalUsersCount: number) {
-    return{
+export function setTotalUsersCount(totalUsersCount: number) {
+    return {
         type: SET_TOTAL_USERS_COUNT,
         totalUsersCount: totalUsersCount
+    }
+}
+
+export function setFetching(isFetching: boolean) {
+    return {
+        type: SET_FETCHING,
+        isFetching: isFetching,
     }
 }
 

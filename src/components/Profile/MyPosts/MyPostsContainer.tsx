@@ -1,21 +1,15 @@
 import React from 'react';
-import {addPostActionCreator, updateTextareaValueMyPosts} from '../../../redux/profile-reducer';
-import {dispatchType, StateType} from '../../../redux/redux-store';
+import {addPost, setFetching, updateTextareaValueMyPosts} from '../../../redux/profile-reducer';
+import {StateType} from '../../../redux/redux-store';
 import {MyPosts} from './MyPosts';
 import {connect} from 'react-redux';
 
 function mapStateToProps(state: StateType) {
     return {
         myPosts: state.profilePage.myPosts,
-        textareaValue: state.profilePage.textareaValue
+        textareaValue: state.profilePage.textareaValue,
+        profile: state.profilePage.profile
     }
 }
 
-function mapDispatchToProps(dispatch: dispatchType) {
-    return {
-        textareaUpdateValue: (text: string) => dispatch(updateTextareaValueMyPosts(text)),
-        addPost: () => dispatch(addPostActionCreator())
-    }
-}
-
-export const MyPostsContainer = connect(mapStateToProps, mapDispatchToProps)(MyPosts);
+export const MyPostsContainer = connect(mapStateToProps, {updateTextareaValueMyPosts, addPost})(MyPosts);

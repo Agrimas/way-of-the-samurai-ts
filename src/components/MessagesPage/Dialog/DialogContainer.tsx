@@ -1,8 +1,8 @@
 import React from 'react';
-import {addMessageActionCreator, updateTextareaValueDialogActionCreator} from '../../../redux/dialogs-reducer';
+import {addMessage, updateTextareaValueDialog} from '../../../redux/dialogs-reducer';
 import {Dialog} from './Dialog';
 import {connect} from 'react-redux';
-import {dispatchType, StateType} from '../../../redux/redux-store';
+import {StateType} from '../../../redux/redux-store';
 
 function mapStateToProps(state: StateType) {
     return {
@@ -11,11 +11,4 @@ function mapStateToProps(state: StateType) {
     }
 }
 
-function mapDispatchToProps(dispatch: dispatchType) {
-    return {
-        updateTextareaValue: (text: string) => dispatch(updateTextareaValueDialogActionCreator(text)),
-        addMessage: () => dispatch(addMessageActionCreator())
-    }
-}
-
-export const DialogContainer = connect(mapStateToProps, mapDispatchToProps)(Dialog);
+export const DialogContainer = connect(mapStateToProps, {updateTextareaValueDialog, addMessage})(Dialog);

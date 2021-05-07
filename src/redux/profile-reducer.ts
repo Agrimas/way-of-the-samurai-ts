@@ -1,31 +1,50 @@
-import {actionType} from './redux-store';
-
+type actionProfilePageType = {
+    type: string
+    text?: string
+    profile?: ProfileType | null
+    isFetching: boolean
+}
 export type profilePageStateType = {
+    isFetching: boolean
     textareaValue: string
     myPosts: Array<PostType>
+    profile: ProfileType | null
 }
 export type PostType = {
     id: number
     text: string
     likesCount: number
 }
+export type ProfileType = {
+    aboutMe: string,
+    contacts: ProfileContactsType,
+    lookingForAJob: boolean,
+    lookingForAJobDescription: string,
+    fullName: string,
+    userId: number,
+    photos: ProfilePhotosType,
+}
+type ProfileContactsType = {
+    facebook: string,
+    website: string,
+    vk: string,
+    twitter: string,
+    instagram: string,
+    youtube: string,
+    github: string,
+    mainLink: string,
+}
+type ProfilePhotosType = {
+    small: string,
+    large: string,
+}
 
 const ADD_POST = 'ADD-POST';
 const UPDATE_TEXTAREA_VALUE_MY_POSTS = 'UPDATE-TEXTAREA-VALUE-MY-POSTS';
+const SET_USER_PROFILE = 'SET-USER-PROFILE';
+const SET_FETCHING = 'SET-FETCHING';
 
-export const addPostActionCreator = () => {
-    return {
-        type: ADD_POST
-    }
-}
-export const updateTextareaValueMyPosts = (text: string) => {
-    return {
-        type: UPDATE_TEXTAREA_VALUE_MY_POSTS,
-        text: text
-    }
-}
-
-const initialState = {
+const initialState: profilePageStateType = {
     textareaValue: '',
     myPosts: [
         {
@@ -44,9 +63,11 @@ const initialState = {
             likesCount: 8
         }
     ],
+    profile: null,
+    isFetching: false,
 };
 
-function profileReducer(state: profilePageStateType = initialState, action: actionType) {
+function profileReducer(state = initialState, action: actionProfilePageType) {
     switch (action.type) {
         case ADD_POST:
             let newPost: PostType = {
@@ -54,16 +75,48 @@ function profileReducer(state: profilePageStateType = initialState, action: acti
                 text: state.textareaValue,
                 likesCount: 0
             }
-            state.myPosts.push(newPost);
-            state.textareaValue = '';
-            break;
+            return {
+                ...state,
+                myPosts: [...state.myPosts, newPost],
+                textareaValue: '',
+            }
         case UPDATE_TEXTAREA_VALUE_MY_POSTS:
             if (action.text) {
-                state.textareaValue = action.text;
+                return {
+                    ...state,
+                    textareaValue: action.text,
+                }
             }
-            break;
+            return state;
+        case SET_USER_PROFILE:
+            if (action.profile) {
+                return {
+                    ...state,
+                    profile: action.profile
+                }
+            }
+            return state;
+        case SET_FETCHING:
+            return {
+                ...state,
+                isFetching: action.isFetching,
+            }
     }
     return state;
 }
+
+export const addPost = () => {
+    return {
+        type: ADD_POST
+    }
+}
+export const updateTextareaValueMyPosts = (text: string) => {
+    return {
+        type: UPDATE_TEXTAREA_VALUE_MY_POSTS,
+        text: text
+    }
+}
+export const setUserProfile = (profile: ProfileType) => ({type: SET_USER_PROFILE, profile: profile})
+export const setFetching = (isFetching: boolean) => ({type: SET_FETCHING, isFetching: isFetching})
 
 export default profileReducer;

@@ -8,7 +8,7 @@ type DialogsType = {
 }
 
 export function DialogsNav(props: DialogsType) {
-    let dialogsNav = props.dialogs.map(dialog => <DialogNav id={dialog.id} name={dialog.name}/>)
+    let dialogsNav = props.dialogs.map(dialog => <DialogNav key={dialog.id} id={dialog.id} name={dialog.name}/>)
     return (
         <div className={Classes.container}>
             <h3 className={Classes.title}>

@@ -4,8 +4,28 @@
     box-sizing: border-box;
     padding: 5px 20px;
     border-bottom: 1px solid black;
+    display: flex;
 }
 
-.logo{
+.logoBlock{
     height: 100%;
+}
+
+.logoBlock img{
+    height: 100%;
+}
+
+.navBlock{
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.navLink{
+    text-decoration: none;
+    padding: 5px 10px;
+    background-color: slateblue;
+    color: gold;
+    border-radius: 10px;
 }

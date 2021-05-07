@@ -1,4 +1,5 @@
 import {actionType} from './redux-store';
+
 export type messagesPageStateType = {
     textareaValue: string
     dialogs: Array<DialogType>
@@ -17,12 +18,12 @@ export type MessageType = {
 const ADD_MESSAGE = 'ADD-MESSAGE';
 const UPDATE_TEXTAREA_VALUE_DIALOG = 'UPDATE-TEXTAREA-VALUE-DIALOG';
 
-export const addMessageActionCreator = () => {
+export const addMessage = () => {
     return {
         type: ADD_MESSAGE
     }
 }
-export const updateTextareaValueDialogActionCreator = (text: string) => {
+export const updateTextareaValueDialog = (text: string) => {
     return {
         type: UPDATE_TEXTAREA_VALUE_DIALOG,
         text: text
@@ -69,14 +70,19 @@ function dialogsReducer(state: messagesPageStateType = initialState, action: act
                 text: state.textareaValue,
                 isMine: true
             }
-            state.messages.push(newMessage);
-            state.textareaValue = '';
-            break;
+            return {
+                ...state,
+                messages: [...state.messages, newMessage],
+                textareaValue: '',
+            };
         case UPDATE_TEXTAREA_VALUE_DIALOG:
             if (action.text) {
-                state.textareaValue = action.text;
+                return {
+                    ...state,
+                    textareaValue: action.text,
+                }
             }
-            break;
+            return state;
     }
 
     return state
