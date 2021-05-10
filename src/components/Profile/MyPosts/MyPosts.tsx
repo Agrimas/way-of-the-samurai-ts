@@ -1,7 +1,7 @@
 import React, {ChangeEvent} from 'react';
 import Classes from './MyPosts.module.css';
 import {Post} from './Post/Post';
-import {PostType, profilePageStateType, ProfileType} from '../../../redux/profile-reducer';
+import {PostType, ProfileType} from '../../../redux/profile-reducer';
 
 type MyPostsType = {
     textareaValue: string

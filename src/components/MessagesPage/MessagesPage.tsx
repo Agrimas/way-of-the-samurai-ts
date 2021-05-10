@@ -2,8 +2,9 @@ import React from 'react';
 import Classes from './MessagesPage.module.css';
 import {DialogContainer} from './Dialog/DialogContainer';
 import {DialogsNavContainer} from './DialogsNav/DialogsNavContainer';
+import {WithAuthRedirect} from '../../hoc/WithAuthRedirect';
 
-export function MessagesPage() {
+function MessagesPage() {
     return (
         <div className={Classes.container}>
             <DialogsNavContainer />
@@ -11,3 +12,5 @@ export function MessagesPage() {
         </div>
     );
 }
+
+export default WithAuthRedirect(MessagesPage);

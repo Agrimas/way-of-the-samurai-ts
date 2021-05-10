@@ -1,28 +1,24 @@
 import React, {Component} from 'react';
 import {Header} from './Header';
-import {AuthAPI, ProfileAPI} from '../../api/api';
 import {connect} from 'react-redux';
 import {StateType} from '../../redux/redux-store';
-import {authStateType, setUserData, userDataType} from '../../redux/auth-reducer';
-import {ProfileType} from '../../redux/profile-reducer';
+import {authStateType, getUserData} from '../../redux/auth-reducer';
 
 type HeaderType = authStateType & {
-    setUserData: (userData: userDataType, profileInfo: ProfileType) => void
-    profileInfo: ProfileType | null
+    getUserData: () => void
 }
 
 class HeaderContainer extends Component<HeaderType> {
     componentDidMount() {
-        AuthAPI.auth().then(response => {
-            ProfileAPI.getProfileInfo(response.data.id).then(profileInfo => {
-                this.props.setUserData(response.data, profileInfo);
-            })
-        });
+        this.props.getUserData();
     }
 
     render() {
+        debugger
         return (
-            <Header {...this.props}/>
+            <Header profileInfo={this.props.profileInfo}
+                    userData={this.props.userData}
+                    isLogin={this.props.isLogin}/>
         );
     }
 }
@@ -35,4 +31,4 @@ function mapStateToProps(state: StateType) {
     }
 }
 
-export default connect(mapStateToProps, {setUserData})(HeaderContainer);
+export default connect(mapStateToProps, {getUserData})(HeaderContainer);

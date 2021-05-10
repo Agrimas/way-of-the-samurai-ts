@@ -1,5 +1,5 @@
 import React from 'react';
-import {addPost, setFetching, updateTextareaValueMyPosts} from '../../../redux/profile-reducer';
+import {addPost, updateTextareaValueMyPosts} from '../../../redux/profile-reducer';
 import {StateType} from '../../../redux/redux-store';
 import {MyPosts} from './MyPosts';
 import {connect} from 'react-redux';

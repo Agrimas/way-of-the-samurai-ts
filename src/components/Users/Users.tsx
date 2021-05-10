@@ -26,15 +26,21 @@ export class Users extends Component<UsersPageType & { onClickPaginationHandler:
                         }>{pageNumber}</span>)}
                 </div>
 
-                {this.props.isFetching ? <Preloader/> : this.props.users.map(u => <User key={u.id}
-                                                                                        id={u.id}
-                                                                                        name={u.name}
-                                                                                        status={u.status}
-                                                                                        photos={u.photos}
-                                                                                        followed={u.followed}
-                                                                                        uniqueUrlName={u.uniqueUrlName}
-                                                                                        follow={this.props.follow}
-                                                                                        unFollow={this.props.unFollow}/>)
+                {this.props.isFetching ?
+                    <Preloader/> :
+                    this.props.users.map(u => <User key={u.id}
+                                                    id={u.id}
+                                                    name={u.name}
+                                                    status={u.status}
+                                                    photos={u.photos}
+                                                    followed={u.followed}
+                                                    uniqueUrlName={u.uniqueUrlName}
+                                                    isFollowProcess={this.props.isFollowProcess.some(id => id === u.id)}
+
+                                                    follow={this.props.follow}
+                                                    unFollow={this.props.unFollow}
+                                                    setFollowProcess={this.props.setFollowProcess}
+                    />)
                 }
             </div>
         );

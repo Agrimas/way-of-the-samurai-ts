@@ -1,45 +1,33 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {
+    initialStateType,
     follow,
-    setCurrentPage, setFetching,
-    setTotalUsersCount,
-    setUsers,
+    setFollowProcess,
     unFollow,
-    userPageStateType, userType,
+    getUsers,
 } from '../../redux/users-reducer';
 import {StateType} from '../../redux/redux-store';
 import {Users} from './Users';
-import {UsersAPI} from '../../api/api';
+import {WithAuthRedirect} from '../../hoc/WithAuthRedirect';
 
-export type UsersPageType = userPageStateType & {
+
+export type UsersPageType = initialStateType & {
     follow: (id: string) => void
     unFollow: (id: string) => void
-    setUsers: (users: Array<userType>) => void
-    setCurrentPage: (currentPage: number) => void
-    setTotalUsersCount: (totalUsersCount: number) => void
-    setFetching: (isFetching: boolean) => void
+    setFollowProcess: (isFollowProcess: boolean, id: string) => void
+    getUsers: (currentPage: number, pageSize: number) => void
 }
 
 
 class UsersContainer extends React.Component<UsersPageType> {
 
     componentDidMount() {
-        this.props.setFetching(true);
-        UsersAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
-            this.props.setFetching(false);
-            this.props.setUsers(data);
-            // this.props.setTotalUsersCount(response.data.totalCount);
-        })
+        this.props.getUsers(this.props.currentPage, this.props.pageSize);
     }
 
     onClickPaginationHandler(pageNumber: number) {
-        this.props.setFetching(true);
-        this.props.setCurrentPage(pageNumber);
-        UsersAPI.getUsers(this.props.currentPage, pageNumber).then(data => {
-            this.props.setFetching(false);
-            // this.props.setUsers(data.items);
-        })
+        this.props.getUsers(pageNumber, this.props.pageSize);
     }
 
     render() {
@@ -56,14 +44,13 @@ function mapStateToProps(state: StateType) {
         currentPage: state.usersPage.currentPage,
         totalUsersCount: state.usersPage.totalUsersCount,
         isFetching: state.usersPage.isFetching,
+        isFollowProcess: state.usersPage.isFollowProcess,
     }
 }
 
-export default connect(mapStateToProps, {
+export default WithAuthRedirect(connect(mapStateToProps, {
     follow,
     unFollow,
-    setUsers,
-    setCurrentPage,
-    setTotalUsersCount,
-    setFetching,
-})(UsersContainer);
+    setFollowProcess,
+    getUsers,
+})(UsersContainer));

@@ -1,14 +1,12 @@
+import {ProfileAPI} from '../api/api';
+import {ThunkAction} from 'redux-thunk';
+import {StateType} from './redux-store';
+
 type actionProfilePageType = {
     type: string
     text?: string
     profile?: ProfileType | null
-    isFetching: boolean
-}
-export type profilePageStateType = {
-    isFetching: boolean
-    textareaValue: string
-    myPosts: Array<PostType>
-    profile: ProfileType | null
+    isFetching?: boolean
 }
 export type PostType = {
     id: number
@@ -44,7 +42,7 @@ const UPDATE_TEXTAREA_VALUE_MY_POSTS = 'UPDATE-TEXTAREA-VALUE-MY-POSTS';
 const SET_USER_PROFILE = 'SET-USER-PROFILE';
 const SET_FETCHING = 'SET-FETCHING';
 
-const initialState: profilePageStateType = {
+const initialState = {
     textareaValue: '',
     myPosts: [
         {
@@ -63,11 +61,13 @@ const initialState: profilePageStateType = {
             likesCount: 8
         }
     ],
-    profile: null,
+    profile: null as null | ProfileType,
     isFetching: false,
 };
 
-function profileReducer(state = initialState, action: actionProfilePageType) {
+export type initialStateType = typeof initialState;
+
+function profileReducer(state = initialState, action: actionProfilePageType): initialStateType {
     switch (action.type) {
         case ADD_POST:
             let newPost: PostType = {
@@ -97,10 +97,13 @@ function profileReducer(state = initialState, action: actionProfilePageType) {
             }
             return state;
         case SET_FETCHING:
-            return {
-                ...state,
-                isFetching: action.isFetching,
+            if (typeof action.isFetching !== 'undefined') {
+                return {
+                    ...state,
+                    isFetching: action.isFetching,
+                }
             }
+            return state;
     }
     return state;
 }
@@ -118,5 +121,13 @@ export const updateTextareaValueMyPosts = (text: string) => {
 }
 export const setUserProfile = (profile: ProfileType) => ({type: SET_USER_PROFILE, profile: profile})
 export const setFetching = (isFetching: boolean) => ({type: SET_FETCHING, isFetching: isFetching})
+
+export const getProfile = (id: number): ThunkAction<Promise<void>, StateType, unknown, actionProfilePageType> => async (dispatch) => {
+    dispatch(setFetching(true));
+    ProfileAPI.getProfileInfo(id).then(data => {
+        dispatch(setUserProfile(data));
+        dispatch(setFetching(false));
+    })
+}
 
 export default profileReducer;

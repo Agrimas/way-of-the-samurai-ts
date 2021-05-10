@@ -8,25 +8,17 @@ import {UsersAPI} from '../../../api/api';
 type UserPropsType = userType & {
     follow: (id: string) => void
     unFollow: (id: string) => void
+    setFollowProcess: (isFollowProcess: boolean, id: string) => void
 }
 
 function User(props: UserPropsType) {
 
     function follow(id: string) {
-        UsersAPI.follow(id).then(result => {
-            if (result === 0) {
-                props.follow(id)
-            }
-        })
-
+        props.follow(id);
     }
 
     function unFollow(id: string) {
-        UsersAPI.unFollow(id).then(result => {
-            if (result === 0) {
-                props.unFollow(id)
-            }
-        })
+        props.unFollow(id);
     }
 
     return (
@@ -35,9 +27,10 @@ function User(props: UserPropsType) {
                 <NavLink to={`/profile/${props.id}`}>
                     <img src={props.photos.small ? props.photos.small : userPhoto} alt=""/>
                 </NavLink>
-                <button onClick={() => {
-                    props.followed ? unFollow(props.id) : follow(props.id)
-                }}>
+                <button disabled={props.isFollowProcess}
+                        onClick={() => {
+                            props.followed ? unFollow(props.id) : follow(props.id)
+                        }}>
                     {props.followed ? 'Unfollow' : 'Follow'}
                 </button>
             </div>
