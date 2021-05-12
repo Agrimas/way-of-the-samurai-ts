@@ -12,22 +12,31 @@ const instance = axios.create({
 })
 
 type AuthAPIType = {
-    auth: () => Promise<authResponseType>
+    auth: () => Promise<ResponseType>
+    login: (email: string,
+            password: string,
+            rememberMe: boolean) => Promise<ResponseType>
+    logout: () => Promise<ResponseType>
 }
 
-type authResponseType = {
+type ResponseType = {
     data: userDataType
     resultCode: number
-    messages: Array<string> | string
+    messages: Array<string>
     fieldsErrors: Array<string>
 }
 
 export const AuthAPI: AuthAPIType = {
     auth() {
         return instance.get(`auth/me/`).then(response => response.data);
+    },
+    login(email, password, rememberMe) {
+        return instance.post('auth/login/', {email, password, rememberMe}).then(response => response.data);
+    },
+    logout() {
+        return instance.delete('auth/login/').then(response => response.data);
     }
 }
-
 
 type UsersAPIType = {
     getUsers: (pageNumber: number, pageSize: number) => Promise<Array<userType>>

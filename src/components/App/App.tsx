@@ -6,6 +6,7 @@ import MessagesPage from '../MessagesPage/MessagesPage';
 import UsersContainer from '../Users/UsersContainer';
 import ProfileContainer from '../Profile/ProfileContainer';
 import HeaderContainer from '../Header/HeaderContainer';
+import Login from '../Login/Login';
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <SidebarContainer/>
             </aside>
             <main>
+                <Route path={'/login'} render={() => <Login/>}/>
                 <Route path={'/profile/:userID?'} render={() => <ProfileContainer/>}/>
                 <Route path={'/messages'} render={() => <MessagesPage/>}/>
                 <Route path={'/users'} render={() => <UsersContainer/>}/>

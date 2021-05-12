@@ -10,6 +10,7 @@ import {
 import {StateType} from '../../redux/redux-store';
 import {Users} from './Users';
 import {WithAuthRedirect} from '../../hoc/WithAuthRedirect';
+import {compose} from 'redux';
 
 
 export type UsersPageType = initialStateType & {
@@ -48,9 +49,9 @@ function mapStateToProps(state: StateType) {
     }
 }
 
-export default WithAuthRedirect(connect(mapStateToProps, {
+export default compose<React.ComponentType>(WithAuthRedirect, connect(mapStateToProps, {
     follow,
     unFollow,
     setFollowProcess,
     getUsers,
-})(UsersContainer));
+}))(UsersContainer);

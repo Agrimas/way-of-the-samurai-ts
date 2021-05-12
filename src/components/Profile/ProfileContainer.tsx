@@ -6,6 +6,7 @@ import {getProfile, ProfileType} from '../../redux/profile-reducer';
 import {withRouter, RouteComponentProps} from 'react-router-dom';
 import Preloader from '../common/Preloader/Preloader';
 import {WithAuthRedirect} from '../../hoc/WithAuthRedirect';
+import {compose} from 'redux';
 
 type RequestType = {
     userID: string
@@ -19,12 +20,17 @@ export type ProfileStateType = RouteComponentProps<RequestType> & {
 
 class ProfileContainer extends Component<ProfileStateType> {
     componentDidMount() {
-        const userID = this.props.match.params.userID || '2';
+        const userID = this.props.match.params.userID || 2;
         this.props.getProfile(+userID);
     }
 
+    componentDidUpdate(prevProps: Readonly<ProfileStateType>) {
+        if (prevProps.match.params.userID !== this.props.match.params.userID) {
+            this.props.getProfile(2);
+        }
+    }
+
     render() {
-        debugger
         return (
             <>
                 {this.props.isFetching ? <Preloader/> : <Profile {...this.props}/>}
@@ -41,4 +47,4 @@ function mapStateToProps(state: StateType) {
     }
 }
 
-export default WithAuthRedirect(connect(mapStateToProps, {getProfile})(withRouter(ProfileContainer)));
+export default compose<React.ComponentType>(connect(mapStateToProps, {getProfile}), withRouter, WithAuthRedirect)(ProfileContainer)

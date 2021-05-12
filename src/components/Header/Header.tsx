@@ -3,7 +3,7 @@ import {NavLink} from 'react-router-dom';
 import Classes from './Header.module.css';
 import {authStateType} from '../../redux/auth-reducer';
 
-export function Header(props: authStateType) {
+export function Header(props: authStateType & { logout: () => void }) {
 
     return (
         <div className={Classes.Header}>
@@ -13,9 +13,13 @@ export function Header(props: authStateType) {
                     alt=""/>
             </div>
             <div className={Classes.navBlock}>
-                <NavLink to={'/login'} className={Classes.navLink}>
-                    {props.profileInfo ? props.profileInfo.fullName: 'Log in'}
-                </NavLink>
+                {props.profileInfo &&
+                <>
+                    <NavLink to={'/profile'} className={Classes.navLink}>
+                        {props.profileInfo.fullName}
+                    </NavLink>
+                    <button className={Classes.navLink} onClick={props.logout}>Logout</button>
+                </>}
             </div>
         </div>
     )
