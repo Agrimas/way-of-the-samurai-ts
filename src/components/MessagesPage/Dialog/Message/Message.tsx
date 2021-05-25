@@ -1,14 +1,15 @@
 import React from 'react';
 import Classes from './Message.module.css';
-import {MessageType} from '../../../../redux/dialogs-reducer';
+import {MessageType} from '../../../../redux/reducers/dialogs-reducer';
+import cn from 'classnames';
 
-export function Message(props: MessageType) {
-    if (props.isMine) {
+export function Message({isMine, text}: MessageType) {
+    if (isMine) {
         return (
-            <p className={Classes.item + ' ' + Classes.isMine}>{props.text}</p>
+            <p className={cn(Classes.item, Classes.isMine)}>{text}</p>
         );
     }
     return (
-        <p className={Classes.item + ' ' + Classes.fromThem}>{props.text}</p>
+        <p className={cn(Classes.item, Classes.fromThem)}>{text}</p>
     );
 }

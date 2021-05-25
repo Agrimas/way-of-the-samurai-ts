@@ -1,37 +1,19 @@
-import {actionType} from './redux-store';
+const ADD_MESSAGE = 'ADD-MESSAGE';
 
-export type messagesPageStateType = {
-    textareaValue: string
-    dialogs: Array<DialogType>
-    messages: Array<MessageType>
-}
+type actionType = | addMessageActionType
+
 export type DialogType = {
     id: number
     name: string
 }
+export type MessagesType = Array<MessageType>;
 export type MessageType = {
     id: number
     text: string
     isMine: boolean
 }
 
-const ADD_MESSAGE = 'ADD-MESSAGE';
-const UPDATE_TEXTAREA_VALUE_DIALOG = 'UPDATE-TEXTAREA-VALUE-DIALOG';
-
-export const addMessage = () => {
-    return {
-        type: ADD_MESSAGE
-    }
-}
-export const updateTextareaValueDialog = (text: string) => {
-    return {
-        type: UPDATE_TEXTAREA_VALUE_DIALOG,
-        text: text
-    }
-}
-
 const initialState = {
-    textareaValue: '',
     dialogs: [
         {
             id: 1,
@@ -61,31 +43,30 @@ const initialState = {
     ]
 };
 
-function dialogsReducer(state: messagesPageStateType = initialState, action: actionType) {
-
+function dialogsReducer(state = initialState, action: actionType) {
     switch (action.type) {
         case ADD_MESSAGE:
             let newMessage: MessageType = {
                 id: 456,
-                text: state.textareaValue,
+                text: action.text,
                 isMine: true
             }
             return {
                 ...state,
                 messages: [...state.messages, newMessage],
-                textareaValue: '',
             };
-        case UPDATE_TEXTAREA_VALUE_DIALOG:
-            if (action.text) {
-                return {
-                    ...state,
-                    textareaValue: action.text,
-                }
-            }
-            return state;
+        default:
+            return state
     }
-
-    return state
 }
+
+type addMessageActionType = {
+    type: typeof ADD_MESSAGE
+    text: string
+}
+export const addMessage = (text: string): addMessageActionType => ({
+    type: ADD_MESSAGE,
+    text
+})
 
 export default dialogsReducer;

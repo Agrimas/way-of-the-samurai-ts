@@ -1,50 +1,61 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Profile} from './Profile';
 import {connect} from 'react-redux';
-import {StateType} from '../../redux/redux-store';
-import {getProfile, ProfileType} from '../../redux/profile-reducer';
-import {withRouter, RouteComponentProps} from 'react-router-dom';
+import {
+    getProfile,
+    updatePhoto,
+    updateProfile
+} from '../../redux/reducers/profile-reducer';
+import {RouteComponentProps, withRouter} from 'react-router-dom';
 import Preloader from '../common/Preloader/Preloader';
 import {WithAuthRedirect} from '../../hoc/WithAuthRedirect';
 import {compose} from 'redux';
+import {withFetching} from '../../utilites/withFetching';
+import {StateType} from '../../redux/redux-store';
+import {ProfileType, updateProfileRequestType} from '../../api/api';
 
-type RequestType = {
-    userID: string
-}
-
-export type ProfileStateType = RouteComponentProps<RequestType> & {
-    profile: ProfileType | null
-    isFetching: boolean
+export type ProfilePagePropsType = RouteComponentProps<{ userID: string }> & {
+    authUserID: number
     getProfile: (id: number) => void
+    profile: ProfileType | null
+    updateProfile: (data: updateProfileRequestType) => void
+    updatePhoto: (image: File) => void
 }
 
-class ProfileContainer extends Component<ProfileStateType> {
-    componentDidMount() {
-        const userID = this.props.match.params.userID || 2;
-        this.props.getProfile(+userID);
-    }
+function ProfileContainer(props: ProfilePagePropsType) {
 
-    componentDidUpdate(prevProps: Readonly<ProfileStateType>) {
-        if (prevProps.match.params.userID !== this.props.match.params.userID) {
-            this.props.getProfile(2);
+    const [isFirstRender, setFirstRender] = useState(true);
+    const [isFetching, setFetching] = useState(false);
+
+    useEffect(() => {
+        if (isFirstRender) {
+            setFirstRender(false)
         }
-    }
 
-    render() {
-        return (
-            <>
-                {this.props.isFetching ? <Preloader/> : <Profile {...this.props}/>}
-            </>
-        );
-    }
+        const userID = props.match.params.userID ?? props.authUserID;
 
+        withFetching(async () => {
+            await props.getProfile(+userID)
+        }, setFetching)
+
+    }, [props.match.params.userID])
+
+    return (
+        <>
+            {isFetching || isFirstRender ? <Preloader/> : <Profile {...props} isOwner={!props.match.params.userID}/>}
+        </>
+    );
 }
 
-function mapStateToProps(state: StateType) {
+const mapStateToProps = (state: StateType) => {
     return {
         profile: state.profilePage.profile,
-        isFetching: state.profilePage.isFetching,
+        authUserID: state.auth.userData?.id
     }
 }
 
-export default compose<React.ComponentType>(connect(mapStateToProps, {getProfile}), withRouter, WithAuthRedirect)(ProfileContainer)
+export default compose<React.ComponentType>(connect(mapStateToProps, {
+    getProfile,
+    updateProfile,
+    updatePhoto
+}), withRouter, WithAuthRedirect)(ProfileContainer)

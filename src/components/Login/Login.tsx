@@ -3,10 +3,9 @@ import Classes from './Login.module.css';
 import React from 'react';
 import * as Yup from 'yup';
 import {connect} from 'react-redux';
-import {login} from '../../redux/auth-reducer';
-import {StateType} from '../../redux/redux-store';
+import {login} from '../../redux/reducers/auth-reducer';
 import {Redirect} from 'react-router-dom';
-
+import {StateType} from '../../redux/redux-store';
 
 export default function Login() {
     return (
@@ -17,82 +16,121 @@ export default function Login() {
     );
 }
 
-type initialValuesType = {
-    email: string
-    password: string
-    remember: false
-}
-
 type LoginFormPropsType = {
     isLogin: boolean
-    error?: string
-    login: (email: string,
-            password: string,
-            rememberMe: boolean) => void
+    error: string | null
+    login: (data: any) => void
+    captcha: null | string
 }
 
 const LoginForm = (props: LoginFormPropsType) => {
-    const initialValues: initialValuesType = {
+    const initialValues = {
         email: '',
         password: '',
         remember: false,
+        captcha: '',
     }
 
-    const LoginSchema = Yup.object().shape({
-        email: Yup.string().email('Invalid email').required('Required'),
-        password: Yup.string()
+    type errorsFormType = {
+        email?: string,
+        password?: string,
+        captcha?: string,
+    }
+    const validate = (values: typeof initialValues) => {
+
+        const errorsForm: errorsFormType = {};
+
+        Yup.string()
+            .required('Required')
+            .validate(values.email)
+            .catch(({errors}) => {
+                errorsForm.email = errors[0]
+            })
+
+        Yup.string()
+            .required('Required')
             .min(6, 'Too Short!')
             .max(50, 'Too Long!')
-            .required('Required'),
-    });
+            .validate(values.password)
+            .catch(({errors}) => {
+                errorsForm.password = errors[0]
+            })
 
-    return (
-        <>
-            {
-                props.isLogin ? <Redirect to={'/profile'}/> :
-                    <Formik
-                        initialValues={initialValues}
-                        validationSchema={LoginSchema}
-                        onSubmit={(values) => {
-                            props.login(values.email, values.password, values.remember);
-                        }}
-                    >
-                        <Form className={Classes.form}>
-                            {props.error}
-                            <label htmlFor="email">Email</label>
+        if (props.captcha) {
+            Yup.string()
+                .required('Required')
+                .validate(values.captcha)
+                .catch(({errors}) => {
+                    debugger
+                    errorsForm.captcha = errors[0]
+                })
+        }
+        return errorsForm;
+    };
+
+    return <>
+        {props.isLogin ? <Redirect to={'/profile'}/> :
+            <Formik
+                initialValues={initialValues}
+                validate={validate}
+                onSubmit={async (values) => {
+                    await props.login(values);
+                }}
+            >
+                <Form className={Classes.form}>
+                    {props.error}
+                    {
+                        props.captcha && <>
+                            <img src={props.captcha} alt="captcha"/>
+                            <label htmlFor={'captcha'}>Captcha</label>
                             <Field
-                                name={'email'}
-                                placeholder={'email'}
+                                name={'captcha'}
+                                placeholder={'captcha'}
                                 tabIndex={1}
                             />
-                            <ErrorMessage component="div" name="email" className={Classes.error}/>
-                            <label htmlFor="password">Password</label>
-                            <Field
-                                name={'password'}
-                                placeholder={'password'}
-                                type={'password'}
-                                tabIndex={2}
-                            />
-                            <ErrorMessage component="div" name="password" className={Classes.error}/>
-                            <label htmlFor="remember">Remember password</label>
-                            <Field
-                                name={'remember'}
-                                type={'checkbox'}
-                                tabIndex={3}
-                            />
-                            <button type="submit" tabIndex={4}>Submit</button>
-                        </Form>
-                    </Formik>
-            }
-        </>
-    );
+                            <ErrorMessage component="div" name="captcha" className={Classes.error}/>
+                        </>}
+
+                    <label htmlFor="email"> Email</label>
+                    <Field
+                        name={'email'}
+                        placeholder={'email'}
+                        tabIndex={1}
+                    />
+                    <ErrorMessage component="div" name="email" className={Classes.error}/>
+
+                    <label htmlFor="password">Password</label>
+                    <Field
+                        name={'password'}
+                        placeholder={'password'}
+                        type={'password'}
+                        tabIndex={2}
+                    />
+                    <ErrorMessage component="div" name="password" className={Classes.error}/>
+
+                    <label htmlFor="remember">Remember password</label>
+                    <Field
+                        name={'remember'}
+                        type={'checkbox'}
+                        tabIndex={3}
+                        autoComplete="off"
+                    />
+                    <button type="submit" tabIndex={4}>Submit</button>
+                </Form>
+            </Formik>}
+    </>
 }
 
 function mapStateToProps(state: StateType) {
     return {
         isLogin: state.auth.isLogin,
-        error: state.auth.errorMessage,
+        error: state.auth.error,
+        captcha: state.auth.captcha,
     }
 }
 
-const LoginFormAuth = connect(mapStateToProps, {login})(LoginForm);
+const LoginFormAuth = connect(mapStateToProps,
+    {
+        login
+    }
+)(LoginForm);

@@ -1,14 +1,13 @@
 import React from 'react';
 import Classes from './MyFriends.module.css';
-import {FriendsType} from '../../redux/sidebar-reducer';
 import {Friend} from './Friend/Friend';
 
 type MyFriendsType = {
-    friends: Array<FriendsType>
+    friends: Array<{ id: number, name: string }>
 }
 
 export function MyFriends(props: MyFriendsType) {
-    let friends = props.friends.map(friend => <Friend id={friend.id} name={friend.name}/>)
+    let friends = props.friends.map(friend => <Friend name={friend.name}/>)
 
     return (
         <div className={Classes.friendsWrap}>

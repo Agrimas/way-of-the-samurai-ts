@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Sidebar} from './Sidebar';
-import {dispatchType, StateType} from '../../redux/redux-store';
+import {StateType} from '../../redux/redux-store';
 
 function mapStateToProps(state: StateType) {
     return {
@@ -9,8 +9,4 @@ function mapStateToProps(state: StateType) {
     }
 }
 
-function mapDispatchToProps(dispatch: dispatchType) {
-    return {}
-}
-
-export const SidebarContainer = connect(mapStateToProps, mapDispatchToProps)(Sidebar);
+export const SidebarContainer = connect(mapStateToProps, {})(Sidebar);

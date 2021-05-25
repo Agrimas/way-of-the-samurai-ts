@@ -1,15 +1,37 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Classes from './InfoProfile.module.css';
-import {ProfileType} from '../../../redux/profile-reducer';
+import {InfoProfileForm} from './InfoProfileForm';
+import {ProfileType, updateProfileRequestType} from '../../../api/api';
+import {InfoProfileView} from './InfoProfileView';
 
-export function InfoProfile(props: ProfileType) {
+export type InfoProfileType = {
+    profile: ProfileType
+    updateProfile: (data: updateProfileRequestType) => void
+    updatePhoto: (image: File) => void
+    isOwner: boolean
+}
+
+export function InfoProfile(props: InfoProfileType) {
+
+    const [editMode, setEditMode] = useState(false);
+
+    const goToEditMode = () => {
+        setEditMode(true);
+    }
+
+    const goToViewMode = () => {
+        setEditMode(false);
+    }
+
     return (
         <div className={Classes.container}>
-            <img className={Classes.main_photo} src="https://storge.pic2.me/c/1360x800/778/58619cae890e5.jpg"
-                 alt="Main photo"/>
-            <h1>{props.fullName}</h1>
-            <p>{props.aboutMe}</p>
+            {editMode ?
+                <InfoProfileForm {...props} goToViewMode={goToViewMode}/> :
+                <>
+                    {props.isOwner && <button onClick={goToEditMode}>Edit</button>}
+                    <InfoProfileView {...props}/>
+                </>
+            }
         </div>
     )
 }
-

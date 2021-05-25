@@ -1,42 +1,49 @@
-import React from 'react';
-import {userType} from '../../../redux/users-reducer';
+import React, {useState} from 'react';
+import {UserType} from '../../../api/api';
 import Classes from './User.module.css';
 import userPhoto from '../../../assets/img/user.jpg';
 import {NavLink} from 'react-router-dom';
-import {UsersAPI} from '../../../api/api';
+import {withFetching} from '../../../utilites/withFetching';
 
-type UserPropsType = userType & {
+type UserPropsType = UserType & {
     follow: (id: string) => void
     unFollow: (id: string) => void
-    setFollowProcess: (isFollowProcess: boolean, id: string) => void
 }
 
-function User(props: UserPropsType) {
+function User({id, name, status, photos, followed, follow, unFollow}: UserPropsType) {
 
-    function follow(id: string) {
-        props.follow(id);
+    let [isFetching, setFetching] = useState(false);
+
+    function followHandler(id: string) {
+        withFetching(async () => {
+            await follow(id)
+        }, setFetching);
     }
 
-    function unFollow(id: string) {
-        props.unFollow(id);
+    async function unFollowHandler(id: string) {
+        withFetching(async () => {
+            await unFollow(id)
+        }, setFetching);
     }
 
     return (
         <div className={Classes.container}>
             <div className={Classes.avatarBlock}>
-                <NavLink to={`/profile/${props.id}`}>
-                    <img src={props.photos.small ? props.photos.small : userPhoto} alt=""/>
+                <NavLink to={`/profile/${id}`}>
+                    <img src={photos.small ? photos.small : userPhoto} alt=""/>
                 </NavLink>
-                <button disabled={props.isFollowProcess}
+                <button disabled={isFetching}
                         onClick={() => {
-                            props.followed ? unFollow(props.id) : follow(props.id)
+                            followed ? unFollowHandler(id) : followHandler(id)
                         }}>
-                    {props.followed ? 'Unfollow' : 'Follow'}
+                    {followed ? 'Unfollow' : 'Follow'}
                 </button>
             </div>
             <div>
-                {props.name}, <br/>
-                {props.status}
+                {name}, <br/>
+                <div className={Classes.status}>
+                    {status}
+                </div>
             </div>
 
         </div>

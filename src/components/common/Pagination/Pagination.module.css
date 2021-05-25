@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    justify-content: space-around;
+    cursor: pointer;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+.selectedPage {
+    color: gold;
+    font-weight: bold;
+}
+
+.pagination {
+    flex: 2 1 auto;
+    display: flex;
+    justify-content: space-around;
+}
+
+.navButton {
+    text-align: center;
+    flex: 1 1 auto;
+    width: 50px;
+    box-sizing: border-box;
+}

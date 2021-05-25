@@ -1,33 +1,35 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import Classes from './MyPosts.module.css';
 import {Post} from './Post/Post';
-import {PostType, ProfileType} from '../../../redux/profile-reducer';
+import {PostType, ProfileType} from '../../../api/api';
 
 type MyPostsType = {
-    textareaValue: string
     myPosts: Array<PostType>
     profile: ProfileType | null
-    updateTextareaValueMyPosts: (text: string) => void
-    addPost: () => void
+    addPost: (text: string) => void
 }
 
 export function MyPosts(props: MyPostsType) {
+
+    const [textareaValue, setTextareaValue] = useState('');
+
     let dataMyPosts = props.myPosts.map(post => <Post key={post.id} id={post.id} text={post.text}
-                                                    likesCount={post.likesCount}/>)
+                                                      likesCount={post.likesCount}/>)
 
     const textareaHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        props.updateTextareaValueMyPosts(event.currentTarget.value);
+        setTextareaValue(event.currentTarget.value);
     }
 
     const addPost = () => {
-        props.addPost();
+        props.addPost(textareaValue);
+        setTextareaValue('');
     }
 
     return (
         <div className={Classes.container}>
             <h2>My Posts</h2>
             <div className={Classes.addPostForm}>
-                <textarea className={Classes.textarea} value={props.textareaValue} onChange={textareaHandler}/>
+                <textarea className={Classes.textarea} value={textareaValue} onChange={textareaHandler}/>
                 <button className={Classes.button} onClick={addPost}>add Post</button>
             </div>
             {dataMyPosts}

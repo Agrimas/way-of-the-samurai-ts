@@ -1,67 +1,123 @@
 import axios from 'axios';
-import {userType} from '../redux/users-reducer';
-import {ProfileType} from '../redux/profile-reducer';
-import {userDataType} from '../redux/auth-reducer';
 
 const instance = axios.create({
     withCredentials: true,
     baseURL: 'https://social-network.samuraijs.com/api/1.0/',
     headers: {
-        'API-KEY': '1ff6f51d-e642-44e0-a765-1ec1a2baad4a'
+        'API-KEY': '4e70ea14-87f8-403e-9a3c-6012dce2b89c'
     },
 })
 
-type AuthAPIType = {
-    auth: () => Promise<ResponseType>
-    login: (email: string,
-            password: string,
-            rememberMe: boolean) => Promise<ResponseType>
-    logout: () => Promise<ResponseType>
-}
-
 type ResponseType = {
-    data: userDataType
-    resultCode: number
-    messages: Array<string>
-    fieldsErrors: Array<string>
+    resultCode: number,
+    messages: Array<string>,
 }
 
-export const AuthAPI: AuthAPIType = {
+// AUTH
+export type requestLoginType = {
+    email: string,
+    password: string,
+    remember: boolean,
+    captcha: string
+}
+export type userDataType = {
+    id: number
+    email: string
+    login: string
+}
+export const AuthAPI = {
     auth() {
-        return instance.get(`auth/me/`).then(response => response.data);
+        return instance.get<Promise<ResponseType & { data: userDataType }>>(`auth/me/`).then(response => response.data);
     },
-    login(email, password, rememberMe) {
-        return instance.post('auth/login/', {email, password, rememberMe}).then(response => response.data);
+    login(data: any) {
+        return instance.post<Promise<ResponseType & { data: { userId: number } }>>('auth/login/', data).then(response => response.data);
     },
     logout() {
-        return instance.delete('auth/login/').then(response => response.data);
+        return instance.delete<Promise<ResponseType & { data: {} }>>('auth/login/').then(response => response.data);
+    },
+    getCaptcha() {
+        return instance.get<{ url: string }>('security/get-captcha-url').then(response => response.data.url)
     }
 }
 
-type UsersAPIType = {
-    getUsers: (pageNumber: number, pageSize: number) => Promise<Array<userType>>
-    follow: (id: string) => Promise<number> // !!!!
-    unFollow: (id: string) => Promise<number> // !!!!
+// USERS
+export type UsersType = Array<UserType>
+export type UserType = {
+    id: string,
+    name: string,
+    status: string | null,
+    photos: ProfilePhotosType,
+    followed: boolean,
+}
+export type UsersResponseType = {
+    error: null | string
+    items: UsersType
+    totalCount: number
+}
+export type FollowUnfollowResponseType = ResponseType & { data: {} };
+export const UsersAPI = {
+    getUsers(pageNumber: number, pageSize: number) {
+        return instance.get<Promise<UsersResponseType>>(`users?page=${pageNumber}&count=${pageSize}`).then(response => response.data);
+    },
+    follow(id: string) {
+        return instance.post<FollowUnfollowResponseType>(`follow/${id}`).then(response => response.data)
+    },
+    unFollow(id: string) {
+        return instance.delete<FollowUnfollowResponseType>(`follow/${id}`).then(response => response.data)
+    },
 }
 
-export const UsersAPI: UsersAPIType = {
-    getUsers(pageNumber, pageSize) {
-        return instance.get(`users?page=${pageNumber}&count=${pageSize}`).then(response => response.data.items);
-    },
-    follow(id) {
-        return instance.post(`follow/${id}`).then(response => response.data.resultCode)
-    },
-    unFollow(id) {
-        return instance.delete(`follow/${id}`).then(response => response.data.resultCode)
-    },
+// PROFILE
+export type ProfileType = {
+    aboutMe: string,
+    contacts: ProfileContactsType,
+    lookingForAJob: boolean,
+    lookingForAJobDescription: string,
+    fullName: string,
+    userId: number,
+    photos: ProfilePhotosType,
 }
-
-type ProfileAPIType = {
-    getProfileInfo: (id: number) => Promise<ProfileType>
+export type ProfileContactsType = {
+    facebook: string,
+    website: string,
+    vk: string,
+    twitter: string,
+    instagram: string,
+    youtube: string,
+    github: string,
+    mainLink: string,
 }
-
-export const ProfileAPI: ProfileAPIType = {
-    getProfileInfo(id) {
-        return instance.get(`profile/${id}`).then(response => response.data);
+export type ProfilePhotosType = {
+    small: string,
+    large: string,
+}
+export type updateProfileRequestType = {
+    aboutMe: string,
+    contacts: ProfileContactsType,
+    lookingForAJob: boolean,
+    lookingForAJobDescription: string,
+    fullName: string,
+    userId: number,
+}
+export type PostType = {
+    id: number
+    text: string
+    likesCount: number
+}
+export const ProfileAPI = {
+    getProfile(id: number) {
+        return instance.get<Promise<ProfileType>>(`profile/${id}`).then(response => response.data);
+    },
+    updateProfile(data: updateProfileRequestType) {
+        return instance.put<Promise<ResponseType & { data: object }>>(`profile`, data).then(response => response.data);
+    },
+    updatePhoto(image: File) {
+        const formData = new FormData();
+        formData.append('image', image);
+        return instance.put<ResponseType & { data: { photos: ProfilePhotosType } }>(`profile/photo`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        }).then(response => response.data)
     }
 }

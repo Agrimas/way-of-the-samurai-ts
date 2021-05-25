@@ -1,20 +1,26 @@
 import React from 'react';
 import Classes from './DialogsNav.module.css';
-import {DialogType} from '../../../redux/dialogs-reducer';
-import {DialogNav} from './DialogNav/DialogNav';
+import {DialogType} from '../../../redux/reducers/dialogs-reducer';
+import {NavLink} from 'react-router-dom';
 
 type DialogsType = {
     dialogs: Array<DialogType>
 }
 
-export function DialogsNav(props: DialogsType) {
-    let dialogsNav = props.dialogs.map(dialog => <DialogNav key={dialog.id} id={dialog.id} name={dialog.name}/>)
+export function DialogsNav({dialogs}: DialogsType) {
     return (
         <div className={Classes.container}>
             <h3 className={Classes.title}>
                 My Dialogs
             </h3>
-            {dialogsNav}
+            {dialogs.map(dialog =>
+                <NavLink
+                    key={dialog.id}
+                    to={'/messages/' + dialog.id}
+                    className={Classes.navLink}>
+
+                    {dialog.name}
+                </NavLink>)}
         </div>
     );
 }

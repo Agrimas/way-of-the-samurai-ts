@@ -1,4 +1,4 @@
-.container{
+.container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -7,12 +7,16 @@
     box-sizing: border-box;
 }
 
-.avatarBlock{
+.avatarBlock {
     width: 80px;
 }
 
-.avatarBlock img{
+.avatarBlock img {
     width: 80px;
     height: 80px;
     border-radius: 50%;
+}
+
+.status {
+    word-break: break-all;
 }

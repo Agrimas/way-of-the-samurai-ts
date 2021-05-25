@@ -8,14 +8,3 @@
     row-gap: 10px;
 }
 
-.pagination{
-    display: flex;
-    justify-content: space-around;
-    cursor: pointer;
-    flex-wrap: wrap;
-}
-
-.selectedPage{
-    color: gold;
-    font-weight: bold;
-}

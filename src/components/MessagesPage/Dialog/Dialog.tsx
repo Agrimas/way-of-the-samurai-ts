@@ -1,25 +1,30 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import Classes from './Dialog.module.css';
 import {Message} from './Message/Message';
-import {MessageType} from '../../../redux/dialogs-reducer';
+import {MessagesType} from '../../../redux/reducers/dialogs-reducer';
 
 type DialogType = {
-    messages: Array<MessageType>
-    textareaValue: string
-    updateTextareaValueDialog: (text: string) => void
-    addMessage: () => void
+    messages: MessagesType
+    addMessage: (text: string) => void
 }
 
 export function Dialog(props: DialogType) {
-    let messages = props.messages.map(message => <Message id={message.id} text={message.text} isMine={message.isMine}/>)
+    const [textareaValueDialog, setTextareaValueDialog] = useState('');
+
+    const messages = props.messages.map(message => <Message key={message.id}
+                                                            id={message.id}
+                                                            text={message.text}
+                                                            isMine={message.isMine}/>)
 
     function onChangeTextareaHandler(event: ChangeEvent<HTMLTextAreaElement>) {
-        props.updateTextareaValueDialog(event.currentTarget.value)
+        setTextareaValueDialog(event.currentTarget.value)
     }
 
     function addMessage() {
-        props.addMessage()
+        props.addMessage(textareaValueDialog);
+        setTextareaValueDialog('');
     }
+
 
     return (
         <div className={Classes.container}>
@@ -28,10 +33,9 @@ export function Dialog(props: DialogType) {
 
             </div>
             <div className={Classes.messagesForm}>
-                <textarea className={Classes.textarea} onChange={onChangeTextareaHandler} value={props.textareaValue}/>
+                <textarea className={Classes.textarea} onChange={onChangeTextareaHandler} value={textareaValueDialog}/>
                 <input type="button" value={'Send'} className={Classes.button} onClick={addMessage}/>
             </div>
         </div>
-
     );
 }
